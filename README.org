@@ -1,0 +1,17 @@
+* Out-Spaces 
+
+** Usage
+
+** Installation
+
+** Author
+
++ Innaky (innaky@protonmail.com)
+
+** Copyright
+
+Copyright (c) 2020 Innaky (innaky@protonmail.com)
+
+** License
+
+Licensed under the GPLv3 License.
