@@ -37,4 +37,4 @@ for default or for any other character, minor to length string."
 	      (not-space (cdr lst-paths))))))
 	    
 
-(split-paths (cl-fad:list-directory "/home/innaky/"))   
+(not-space (cl-fad:list-directory "/home/innaky/"))   
