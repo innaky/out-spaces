@@ -1,5 +1,7 @@
 (defpackage out-spaces
-  (:use :cl))
+  (:use :cl)
+  (:export :trim))
+
 (in-package :out-spaces)
 
 (defun string-to-charlst (long-str &optional (position 0))
@@ -27,6 +29,12 @@ for default or for any other character, minor to length string."
     (concatenate 'string
 		 (del-letter #\space lst-chars))))
 
+(defun match? (elem lst)
+  (if (equal nil lst)
+      nil
+      (or (equal elem (car lst))
+	  (match? elem (cdr lst)))))
+
 (defun not-space (lst-paths)
   "Return a list of string-filenames without space names."
   (if (equal nil lst-paths)
@@ -35,6 +43,18 @@ for default or for any other character, minor to length string."
 	    (head-name (directory-namestring (car lst-paths))))
 	(cons (concatenate 'string head-name (without-space filename))
 	      (not-space (cdr lst-paths))))))
-	    
 
-(not-space (cl-fad:list-directory "/home/innaky/"))   
+(defun not-space (lst-paths)
+  "Delete the spaces of the filenames"
+  (if (equal nil lst-paths)
+      nil
+      (let ((filename (file-namestring (namestring (car lst-paths))))
+	    (head-path (directory-namestring (car lst-paths))))
+	(if (match? #\space (string-to-charlst filename))
+	    (rename-file (car lst-paths) (concatenate 'string head-path (without-space filename))))
+	(not-space (cdr lst-paths)))))
+
+(defun trim (directory-path)
+  "Wrapper, capture the `directory-path' and return a list of files, this files are processed
+with the function `not-space'."
+  (not-space (cl-fad:list-directory directory-path)))
