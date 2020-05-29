@@ -36,15 +36,6 @@ for default or for any other character, minor to length string."
 	  (match? elem (cdr lst)))))
 
 (defun not-space (lst-paths)
-  "Return a list of string-filenames without space names."
-  (if (equal nil lst-paths)
-      nil
-      (let ((filename (file-namestring (namestring (car lst-paths))))
-	    (head-name (directory-namestring (car lst-paths))))
-	(cons (concatenate 'string head-name (without-space filename))
-	      (not-space (cdr lst-paths))))))
-
-(defun not-space (lst-paths)
   "Delete the spaces of the filenames"
   (if (equal nil lst-paths)
       nil
