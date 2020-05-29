@@ -1,5 +1,5 @@
 # Out-Spaces
-Delete the Spaces from the filenames of a directory
+Rename the filenames of a directory, deleting spaces and joining the name.
 
 ## Usage
 
