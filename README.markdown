@@ -1,7 +1,12 @@
 # Out-Spaces
-Rename the filenames of a directory, deleting spaces and joining the name.
+
+* Rename the filenames of a directory, deleting spaces and joining the name. 
+* Adding prefix or sufix for the filenames of a directory.
+
 
 ## Usage
+
+### Out spaces
 
 * First:
 
@@ -23,6 +28,29 @@ CL-USER> (out-spaces:trim "/home/innaky/test")
 $ > ls /home/innaky/test
 aaa aer bcc qegyrbswrtrt
 ```
+
+### Prefix - Sufix filename
+
+* First
+
+```bash
+$ > ls /home/innaky/test
+aaa aer bcc qegyrbswrtrt
+```
+* Prefix
+
+```lisp
+CL-USER> (ql:quickload :out-spaces)
+CL-USER> (out-spaces:add-prefix "prefix-test-" "/home/innaky/test")
+```
+
+* Check
+
+```bash
+$ > ls /home/innaky/test
+prefix-test-aaa prefix-test-bcc prefix-test-qegyrbswrtrt
+```
+Same procedure for sufix, but the function name is **out-space:add-sufix**
 
 ## Installation
 
