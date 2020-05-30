@@ -1,8 +1,13 @@
 (defpackage out-spaces
   (:use :cl)
-  (:export :trim))
+  (:export :trim
+	   :add-prefix
+	   :add-sufix))
 
 (in-package :out-spaces)
+
+(defmacro cc-s (&rest strs)
+  `(concatenate 'string ,@strs))
 
 (defun string-to-charlst (long-str &optional (position 0))
   "The input is a string the output a list of characters, run from character 0
@@ -34,7 +39,7 @@ for default or for any other character, minor to length string."
       nil
       (or (equal elem (car lst))
 	  (match? elem (cdr lst)))))
-
+		 
 (defun not-space (lst-paths)
   "Delete the spaces of the filenames"
   (if (equal nil lst-paths)
@@ -49,3 +54,29 @@ for default or for any other character, minor to length string."
   "Wrapper, capture the `directory-path' and return a list of files, this files are processed
 with the function `not-space'."
   (not-space (cl-fad:list-directory directory-path)))
+
+(defun prefix (prefix-str lst-paths)
+  "Add a prefix text in the filename."
+  (if (equal nil lst-paths)
+      nil
+      (let ((filename (pathname-name (namestring (car lst-paths))))
+	    (head-path (directory-namestring (car lst-paths))))
+	(rename-file (car lst-paths) (cc-s head-path prefix-str filename))
+	(prefix prefix-str (cdr lst-paths)))))
+
+(defun sufix (sufix-str lst-paths)
+  "Add a sufix text in the filename."
+  (if (equal nil lst-paths)
+      nil
+      (let ((base-filename (pathname-name (namestring (car lst-paths))))
+	    (head-path (directory-namestring (car lst-paths))))
+	(rename-file (car lst-paths) (cc-s head-path base-filename sufix-str))
+	(sufix sufix-str (cdr lst-paths)))))
+
+(defun add-prefix (prefix-str directory-path)
+  "Wrapper over prefix with the list of directories."
+  (prefix prefix-str (cl-fad:list-directory directory-path)))
+
+(defun add-sufix (sufix-str directory-path)
+  "Wrapper over sufix, with the list of directories."
+  (sufix sufix-str (cl-fad:list-directory directory-path)))
