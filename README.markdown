@@ -31,37 +31,37 @@ aaa aer bcc qegyrbswrtrt
 
 ### Prefix - Sufix filename
 
-* First
+* List files
 
 ```bash
 $ > ls /home/innaky/test
-aaa aer bcc qegyrbswrtrt
+foo.lisp bar.png
 ```
-* Prefix 
+* Prefix action
 
 ```lisp
 CL-USER> (ql:quickload :out-spaces)
 CL-USER> (out-spaces:psfix "pf" "prefix-test-" "/home/innaky/test")
 ```
 
-* Check
+* Check change
 
 ```bash
 $ > ls /home/innaky/test
-prefix-test-aaa prefix-test-bcc prefix-test-qegyrbswrtrt
+prefix-test-foo.lisp prefix-test-bar.png
 ```
 
-* Sufix
+* Sufix action
 
 ```lisp
 CL-USER> (out-spaces:psfix "sf" "--sufix" "/home/innaky/test")
 ```
 
-* Check
+* Check changes
 
 ```bash
 $ > ls /home/innaky/test
-prefix-test-aaa--sufix prefix-test-bcc--sufix prefix-test-qegyrbswrtrt--sufix
+foo--sufix.lisp bar--sufix.png
 ```
 
 ## Installation
