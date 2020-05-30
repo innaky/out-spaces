@@ -54,6 +54,8 @@ with the function `not-space'."
   (not-space (cl-fad:list-directory directory-path)))
 
 (defun psfix (fix str-fix lst-paths)
+  "Take the string \"pf\" for activate the prefix logic or the string \"sf\" for the sufix logic,
+the parameter `str-fix' is the string sufix or prefix and `lst-paths' is a list of files."
   (if (equal nil lst-paths)
       nil
       (let ((base-filename (pathname-name (namestring (car lst-paths))))
@@ -63,4 +65,5 @@ with the function `not-space'."
 	(psfix fix str-fix (cdr lst-paths)))))
 
 (defun add-psfix (fix str-fix directory-path)
+  "This function is a wrapper of `psfix'"
   (psfix fix str-fix (cl-fad:list-directory directory-path)))
