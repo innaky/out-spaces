@@ -1,8 +1,7 @@
 (defpackage out-spaces
   (:use :cl)
   (:export :trim
-	   :add-prefix
-	   :add-sufix))
+	   :add-psfix))
 
 (in-package :out-spaces)
 
@@ -31,8 +30,7 @@ for default or for any other character, minor to length string."
 (defun without-space (str)
   "Delete the #\space character for `str'."
   (let ((lst-chars (string-to-charlst str)))
-    (concatenate 'string
-		 (del-letter #\space lst-chars))))
+    (cc-s (del-letter #\space lst-chars))))
 
 (defun match? (elem lst)
   (if (equal nil lst)
@@ -47,7 +45,7 @@ for default or for any other character, minor to length string."
       (let ((filename (file-namestring (namestring (car lst-paths))))
 	    (head-path (directory-namestring (car lst-paths))))
 	(if (match? #\space (string-to-charlst filename))
-	    (rename-file (car lst-paths) (concatenate 'string head-path (without-space filename))))
+	    (rename-file (car lst-paths) (cc-s head-path (without-space filename))))
 	(not-space (cdr lst-paths)))))
 
 (defun trim (directory-path)
@@ -55,28 +53,14 @@ for default or for any other character, minor to length string."
 with the function `not-space'."
   (not-space (cl-fad:list-directory directory-path)))
 
-(defun prefix (prefix-str lst-paths)
-  "Add a prefix text in the filename."
-  (if (equal nil lst-paths)
-      nil
-      (let ((filename (pathname-name (namestring (car lst-paths))))
-	    (head-path (directory-namestring (car lst-paths))))
-	(rename-file (car lst-paths) (cc-s head-path prefix-str filename))
-	(prefix prefix-str (cdr lst-paths)))))
-
-(defun sufix (sufix-str lst-paths)
-  "Add a sufix text in the filename."
+(defun psfix (fix str-fix lst-paths)
   (if (equal nil lst-paths)
       nil
       (let ((base-filename (pathname-name (namestring (car lst-paths))))
 	    (head-path (directory-namestring (car lst-paths))))
-	(rename-file (car lst-paths) (cc-s head-path base-filename sufix-str))
-	(sufix sufix-str (cdr lst-paths)))))
+	(cond ((equal fix "pf") (rename-file (car lst-paths) (cc-s head-path str-fix base-filename)))
+	      ((equal fix "sf") (rename-file (car lst-paths) (cc-s head-path base-filename str-fix))))
+	(psfix fix str-fix (cdr lst-paths)))))
 
-(defun add-prefix (prefix-str directory-path)
-  "Wrapper over prefix with the list of directories."
-  (prefix prefix-str (cl-fad:list-directory directory-path)))
-
-(defun add-sufix (sufix-str directory-path)
-  "Wrapper over sufix, with the list of directories."
-  (sufix sufix-str (cl-fad:list-directory directory-path)))
+(defun add-psfix (fix str-fix directory-path)
+  (psfix fix str-fix (cl-fad:list-directory directory-path)))
