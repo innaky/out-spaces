@@ -1,7 +1,8 @@
 (defpackage out-spaces
   (:use :cl)
   (:export :trim
-	   :add-psfix))
+	   :add-psfix
+	   :psfix-filter))
 
 (in-package :out-spaces)
 
