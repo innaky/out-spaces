@@ -64,6 +64,24 @@ the parameter `str-fix' is the string sufix or prefix and `lst-paths' is a list 
 	      ((equal fix "sf") (rename-file (car lst-paths) (cc-s head-path base-filename str-fix))))
 	(psfix fix str-fix (cdr lst-paths)))))
 
+(defun ext-filter (lst-paths ext)
+  "The input is a list of filenames and a file extension.
+The output is a list of files with teh file extension.
+Not implement regex only plain file extension
+Ex: \"lisp\" for lisp filenames."
+  (if (equal nil lst-paths)
+      nil
+      (if (equal (pathname-type (pathname (namestring (car lst-paths)))) ext)
+	  (cons (car lst-paths)
+		(ext-filter (cdr lst-paths) ext))
+	  (ext-filter (cdr lst-paths) ext))))
+
+(defun psfix-filter (fix str-fix directory-path ext)
+  "Extend the functionality of `psfix', this function is a wrapper and apply the
+filter filename."
+  (psfix fix str-fix
+	 (ext-filter (cl-fad:list-directory directory-path) ext)))
+
 (defun add-psfix (fix str-fix directory-path)
   "This function is a wrapper of `psfix'"
   (psfix fix str-fix (cl-fad:list-directory directory-path)))
