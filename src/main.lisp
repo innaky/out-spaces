@@ -3,7 +3,8 @@
   (:export :trim
 	   :generic-trim
 	   :add-psfix
-	   :psfix-filter))
+	   :psfix-filter
+	   :replace-letter))
 
 (in-package :out-spaces)
 
