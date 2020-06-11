@@ -1,6 +1,7 @@
 (defpackage out-spaces
   (:use :cl)
   (:export :trim
+	   :generic-trim
 	   :add-psfix
 	   :psfix-filter))
 
@@ -28,6 +29,11 @@ for default or for any other character, minor to length string."
 	((char= letter (car char-lst)) (del-letter letter (cdr char-lst)))
 	(t (cons (car char-lst) (del-letter letter (cdr char-lst))))))
 
+(defun without-char (str char)
+  "Delete any `char' for `str'."
+  (let ((lst-chars (string-to-charlst str)))
+    (cc-s (del-letter char lst-chars))))
+
 (defun without-space (str)
   "Delete the #\space character for `str'."
   (let ((lst-chars (string-to-charlst str)))
@@ -38,7 +44,17 @@ for default or for any other character, minor to length string."
       nil
       (or (equal elem (car lst))
 	  (match? elem (cdr lst)))))
-		 
+
+(defun not-char (char lst-paths)
+  "Delete the match `char' of the filenames."
+  (if (equal nil lst-paths)
+      nil
+      (let ((filename (file-namestring (namestring (car lst-paths))))
+	    (head-path (directory-namestring (car lst-paths))))
+	(if (match? char (string-to-charlst filename))
+	    (rename-file (car lst-paths) (cc-s head-path (without-char filename char))))
+	(not-char char (cdr lst-paths)))))
+
 (defun not-space (lst-paths)
   "Delete the spaces of the filenames"
   (if (equal nil lst-paths)
@@ -48,6 +64,10 @@ for default or for any other character, minor to length string."
 	(if (match? #\space (string-to-charlst filename))
 	    (rename-file (car lst-paths) (cc-s head-path (without-space filename))))
 	(not-space (cdr lst-paths)))))
+
+(defun generic-trim (char directory-path)
+  "Wrapper function, use a `char' and a `directory-path' and delete the `char' matching."
+  (not-char char (cl-fad:list-directory directory-path)))
 
 (defun trim (directory-path)
   "Wrapper, capture the `directory-path' and return a list of files, this files are processed
