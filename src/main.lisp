@@ -45,6 +45,26 @@ for default or for any other character, minor to length string."
       (or (equal elem (car lst))
 	  (match? elem (cdr lst)))))
 
+(defun replace-atom (new old lst)
+  "Replace `old' by `new' if exists inside `lst'. If not exists the `old' element return the
+same `lst'."
+  (cond ((equal nil lst) nil
+	 (t (cond ((equal (car lst) old) (cons new (cdr lst)))
+		  (t (cons (car lst) (replace-atom new old (cdr lst)))))))))
+
+(defun replace-char (new old lst-paths)
+  "Replace the `new' by `old' in the filename of a directory. If `old' match in the filename `new' 
+is added, else return the same filename. The file extensions are not changed."
+  (if (equal nil lst-paths)
+      nil
+      (let ((filename (file-namestring (namestring (car lst-paths))))
+	    (head-path (directory-namestring (car lst-paths))))
+	(if (match? old (string-to-charlst filename))
+	    (rename-file (car lst-paths)
+			 (cc-s head-path
+			       (replace-atom new old (string-to-charlst filename)))))
+	(replace-char new old (cdr lst-paths)))))
+							      
 (defun not-char (char lst-paths)
   "Delete the match `char' of the filenames."
   (if (equal nil lst-paths)
@@ -64,6 +84,11 @@ for default or for any other character, minor to length string."
 	(if (match? #\space (string-to-charlst filename))
 	    (rename-file (car lst-paths) (cc-s head-path (without-space filename))))
 	(not-space (cdr lst-paths)))))
+
+(defun replace-letter (new-letter to-replace directory-path)
+  "This function is a wrapper over the function `replace-char'. `directory-path' build
+the list of files for `replace-char'."
+  (replace-char new-letter to-replace (cl-fad:list-directory directory-path)))
 
 (defun generic-trim (char directory-path)
   "Wrapper function, use a `char' and a `directory-path' and delete the `char' matching."
