@@ -6,6 +6,50 @@
 
 ## Usage
 
+### Delete any letter
+
+For delete any letter, util for delete unicode characters
+
+```lisp
+CL-USER> (out-spaces:generic-trim #\á "/home/innaky") 
+```
+
+* Before 
+
+```bash
+ls ~
+my_file_áexample.lisp
+```
+
+* After
+
+```bash
+ls ~
+my_file_example.lisp
+```
+
+### Replace any letter
+
+Replace Any letter of the filenames, util for "change" unicode characters to ascii characters.
+
+```lisp
+CL-USER> (out-space:replace-letter #\e #\é "/home/innaky"
+```
+
+* Before
+
+```bash
+ls ~
+my_filé.lisp
+```
+
+* After
+
+```bash
+ls ~
+my_file.lisp
+```
+
 ### Out spaces
 
 * First (list the files)
@@ -108,6 +152,12 @@ Return the string-fix added in all filenames of a directory.
 * (psfix-filter *["pf"|"sf"]* *str-fix* *directory-path* *file-extension*)
 This function take an file-extension and apply the prefix or sufix change in this files.
 This function run only with explicit filename extension, is a soft filter
+
+* (generic-trim *character* *directory-path*)
+Delete the match *character* in filenames of *directory-path*
+
+* (replace-letter *new-letter* *to-replace* *directoy-path*)
+Replace *to-replace* by *new-letter* in filename of *directory-path*
 
 ## Author
 
