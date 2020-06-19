@@ -49,9 +49,9 @@ for default or for any other character, minor to length string."
 (defun replace-atom (new old lst)
   "Replace `old' by `new' if exists inside `lst'. If not exists the `old' element return the
 same `lst'."
-  (cond ((equal nil lst) nil
-	 (t (cond ((equal (car lst) old) (cons new (cdr lst)))
-		  (t (cons (car lst) (replace-atom new old (cdr lst)))))))))
+  (cond ((equal nil lst) nil)
+	(t (cond ((equal (car lst) old) (cons new (replace-atom new old (cdr lst))))
+		 (t (cons (car lst) (replace-atom new old (cdr lst))))))))
 
 (defun replace-char (new old lst-paths)
   "Replace the `new' by `old' in the filename of a directory. If `old' match in the filename `new' 
