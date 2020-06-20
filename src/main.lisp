@@ -1,6 +1,6 @@
 (defpackage out-spaces
   (:use :cl)
-  (:export :trim
+  (:export :space-trim
 	   :generic-trim
 	   :add-psfix
 	   :psfix-filter
@@ -34,11 +34,6 @@ for default or for any other character, minor to length string."
   "Delete any `char' for `str'."
   (let ((lst-chars (string-to-charlst str)))
     (cc-s (del-letter char lst-chars))))
-
-(defun without-space (str)
-  "Delete the #\space character for `str'."
-  (let ((lst-chars (string-to-charlst str)))
-    (cc-s (del-letter #\space lst-chars))))
 
 (defun match? (elem lst)
   (if (equal nil lst)
@@ -76,16 +71,6 @@ is added, else return the same filename. The file extensions are not changed."
 	    (rename-file (car lst-paths) (cc-s head-path (without-char filename char))))
 	(not-char char (cdr lst-paths)))))
 
-(defun not-space (lst-paths)
-  "Delete the spaces of the filenames"
-  (if (equal nil lst-paths)
-      nil
-      (let ((filename (file-namestring (namestring (car lst-paths))))
-	    (head-path (directory-namestring (car lst-paths))))
-	(if (match? #\space (string-to-charlst filename))
-	    (rename-file (car lst-paths) (cc-s head-path (without-space filename))))
-	(not-space (cdr lst-paths)))))
-
 (defun replace-letter (new-letter to-replace directory-path)
   "This function is a wrapper over the function `replace-char'. `directory-path' build
 the list of files for `replace-char'."
@@ -95,10 +80,10 @@ the list of files for `replace-char'."
   "Wrapper function, use a `char' and a `directory-path' and delete the `char' matching."
   (not-char char (cl-fad:list-directory directory-path)))
 
-(defun trim (directory-path)
+(defun space-trim (directory-path)
   "Wrapper, capture the `directory-path' and return a list of files, this files are processed
 with the function `not-space'."
-  (not-space (cl-fad:list-directory directory-path)))
+  (not-char #\space (cl-fad:list-directory directory-path)))
 
 (defun psfix (fix str-fix lst-paths)
   "Take the string \"pf\" for activate the prefix logic or the string \"sf\" for the sufix logic,
