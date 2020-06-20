@@ -1,12 +1,14 @@
 # Out-Spaces
 
 * Rename the filenames of a directory, deleting spaces and joining the name. 
-* Adding prefix or sufix for the filenames of a directory.
+* Adding prefix or sufix for the filenames of a directory.  
 * Adding prefix or sufix using a filter for file type of a directory.
+* Replace any letter of the filename.
+* Delete any letter of the filename.
 
 ## Usage
 
-### Delete any letter
+### *Delete* any letter
 
 For delete any letter, util for delete unicode characters
 
@@ -28,12 +30,12 @@ ls ~
 my_file_example.lisp
 ```
 
-### Replace any letter
+### *Replace* any letter
 
 Replace Any letter of the filenames, util for "change" unicode characters to ascii characters.
 
 ```lisp
-CL-USER> (out-space:replace-letter #\e #\é "/home/innaky"
+CL-USER> (out-spaces:replace-letter #\e #\é "/home/innaky"
 ```
 
 * Before
@@ -50,27 +52,26 @@ ls ~
 my_file.lisp
 ```
 
-### Out spaces
+### *Delete* spaces
 
-* First (list the files)
-
-```bash
-$ > ls /home/innaky/test
-'a a a' 'a er' 'b c c' 'qe gy rb sw rtrt'
-```
-
-* Apply "Trim"
+Delete the spaces of the filenames
 
 ```lisp
-CL-USER> (ql:quickload :out-spaces)
-CL-USER> (out-spaces:trim "/home/innaky/test")
+CL-USER> (out-spaces:space-trim "/home/innaky/")
 ```
 
-* Check changes
+* Before (list the files)
 
 ```bash
-$ > ls /home/innaky/test
-aaa aer bcc qegyrbswrtrt
+$ > ls ~
+'my file.png' 'another filename example.lisp'
+```
+
+* After
+
+```bash
+$ > ls ~
+myfile.png anotherfilenameexample.lisp
 ```
 
 ### Prefix - Sufix filename
@@ -131,6 +132,8 @@ test-a.lisp a.jpg test-file.lisp test-hello world.lisp pic.png doc.pdf
 
 ## Installation
 
+You need install [quicklisp](https://www.quicklisp.org/beta/#installation), next:
+
 Using quicklisp copy in your *local-projects*
 
 * steps
@@ -142,7 +145,7 @@ git clone https://github.com/innaky/out-spaces.git
 
 ## Reference
 
-* (trim *directory-path*) 
+* (space-trim *directory-path*) 
 This function take a directory path. Return a joining filenames (without spaces).
 
 * (add-psfix *["pf"|"sf"]* *str-fix* *directory-path*)
